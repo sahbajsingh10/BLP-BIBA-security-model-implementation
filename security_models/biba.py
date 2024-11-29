@@ -7,8 +7,10 @@ class BibaModel:
         """Enforces 'No Write Up' policy."""
         return user_level >= file_level
 
-    def enforce(self, action, user_level, file_level):
-        """Enforces Biba rules based on the action."""
+    def enforce(self, action, user_level, file_level, user_compartments, file_compartments):
+        """Enforces Biba rules including compartment checks."""
+        if not set(user_compartments).intersection(set(file_compartments)):
+            return False  # No shared compartments
         if action == "read":
             return self.can_read(user_level, file_level)
         elif action == "write":
