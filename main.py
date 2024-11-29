@@ -1,18 +1,22 @@
 from users.user_manager import UserManager
 from files.file_manager import FileManager
-from security_models.blp import BellLaPadula
-from security_models.biba import BibaModel
+from database.db_setup import setup_database
 
 def main():
-    print("Welcome to the Dynamic Access Control System!")
+    # Initialize database
+    setup_database()
+
     # Initialize managers
     user_manager = UserManager()
     file_manager = FileManager()
-    blp = BellLaPadula()
-    biba = BibaModel()
 
-    # Placeholder for system interaction
-    print("System Initialized. Ready to enforce access control.")
+    # Add a user
+    user_manager.add_user("Alice", 2, ["HR", "Finance"])
+    print(user_manager.get_user("Alice"))
+
+    # Create a file
+    file_manager.create_file("Report.pdf", 3, ["Finance"])
+    print(file_manager.get_file("Report.pdf"))
 
 if __name__ == "__main__":
     main()
