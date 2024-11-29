@@ -1,3 +1,4 @@
+import sqlite3
 from database.db_setup import get_db_connection
 
 class UserManager:
