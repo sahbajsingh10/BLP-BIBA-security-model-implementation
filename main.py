@@ -53,6 +53,7 @@ def test_access_control():
     user_manager.add_user("Charlie", 3, ["Finance", "Legal"])
     user_manager.add_user("Diana", 2, ["HR"])
     user_manager.add_user("Eve", 3, ["IT", "Finance"])
+    user_manager.add_user("Sahbaj", 3, ["Bossman", "Boss"])
 
     # Add multiple files
     file_manager.create_file("Report.pdf", 3, ["Finance"])
@@ -62,7 +63,7 @@ def test_access_control():
     file_manager.create_file("Financial_Report.xlsx", 3, ["Finance", "Legal"])
 
     # Fetch users and files
-    users = {username: user_manager.get_user(username) for username in ["Alice", "Bob", "Charlie", "Diana", "Eve"]}
+    users = {username: user_manager.get_user(username) for username in ["Alice", "Bob", "Charlie", "Diana", "Eve", "Sahbaj"]}
     files = {filename: file_manager.get_file(filename) for filename in ["Report.pdf", "IT_Policy.docx", "Legal_Doc.txt", "HR_Guide.pdf", "Financial_Report.xlsx"]}
 
     # Dynamic testing and logging
