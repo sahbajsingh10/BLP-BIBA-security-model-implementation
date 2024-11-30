@@ -5,6 +5,42 @@ from security_models.biba import BibaModel
 from database.db_setup import fetch_test_results, setup_database, log_test_result
 
 
+def register_user():
+    """Registers a new user by asking for their details."""
+    user_manager = UserManager()
+    
+    print("\n=== User Registration ===")
+    username = input("Enter username: ")
+    security_level = int(input("Enter security level (integer): "))
+    compartments = input("Enter compartments (comma-separated, e.g., HR,Finance): ").split(',')
+
+    user_manager.add_user(username, security_level, compartments)
+    print(f"User '{username}' registered successfully!")
+
+
+def register_menu():
+    """Displays a menu for user registration."""
+    while True:
+        print("\n=== Main Menu ===")
+        print("1. Register a new user")
+        print("2. View test results")
+        print("3. Run access control tests")
+        print("4. Exit")
+        choice = input("Enter your choice: ")
+        
+        if choice == "1":
+            register_user()
+        elif choice == "2":
+            view_test_results()
+        elif choice == "3":
+            test_access_control()
+        elif choice == "4":
+            print("Exiting the program.")
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+
 def test_access_control():
     user_manager = UserManager()
     file_manager = FileManager()
@@ -64,8 +100,8 @@ def main():
     # Initialize database
     setup_database()
 
-    # Run access control tests
-    test_access_control()
+    # Display registration menu
+    register_menu()
 
 
 if __name__ == "__main__":
