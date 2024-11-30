@@ -2,14 +2,8 @@ from users.user_manager import UserManager
 from files.file_manager import FileManager
 from security_models.blp import BellLaPadula
 from security_models.biba import BibaModel
-from database.db_setup import fetch_test_results, setup_database
+from database.db_setup import fetch_test_results, setup_database, log_test_result
 
-from database.db_setup import log_test_result
-
-
-def main():
-    # Initialize database
-    setup_database()
 
 def test_access_control():
     user_manager = UserManager()
@@ -36,7 +30,9 @@ def test_access_control():
     files = {filename: file_manager.get_file(filename) for filename in ["Report.pdf", "IT_Policy.docx", "Legal_Doc.txt", "HR_Guide.pdf", "Financial_Report.xlsx"]}
 
     # Dynamic testing and logging
-    print("\n=== Expanded Access Control Tests ===")
+    print("\n" + "=" * 80)
+    print(f"{'MODEL':<10} {'ACTION':<10} {'USER':<10} {'FILE':<25} {'ALLOWED':<8}")
+    print("=" * 80)
     for user_name, user in users.items():
         for file_name, file in files.items():
             for model_name, model in [("BLP", blp), ("Biba", biba)]:
@@ -49,18 +45,28 @@ def test_access_control():
                         file["compartments"]
                     )
                     log_test_result(user_name, file_name, model_name, action, allowed)
-                    print(f"{model_name}: Can {user_name} {action.upper()} {file_name}? {allowed}")
+                    print(f"{model_name:<10} {action.upper():<10} {user_name:<10} {file_name:<25} {str(allowed):<8}")
+    print("=" * 80)
 
 
+def view_test_results():
+    """Displays all test results."""
+    results = fetch_test_results()
+    print("\n" + "=" * 80)
+    print(f"{'USER':<10} {'FILE':<25} {'MODEL':<10} {'ACTION':<10} {'ALLOWED':<8}")
+    print("=" * 80)
+    for result in results:
+        print(f"{result['user']:<10} {result['file']:<25} {result['model']:<10} {result['action']:<10} {str(result['allowed']):<8}")
+    print("=" * 80)
+
+
+def main():
+    # Initialize database
+    setup_database()
 
     # Run access control tests
     test_access_control()
-    
-    results = fetch_test_results()
-    print("\n=== Test Results ===")
-    for result in results:
-        print(f"User: {result['user']}, File: {result['file']}, Model: {result['model']}, Action: {result['action']}, Allowed: {result['allowed']}, Timestamp: {result['timestamp']}")
+
 
 if __name__ == "__main__":
     main()
-

@@ -29,7 +29,7 @@ def setup_database():
     )
     """)
 
-    # Create test_results table
+    # Create test_results table without timestamp
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS test_results (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -37,10 +37,14 @@ def setup_database():
         file TEXT NOT NULL,
         model TEXT NOT NULL,
         action TEXT NOT NULL,
-        allowed BOOLEAN NOT NULL,
-        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+        allowed BOOLEAN NOT NULL
     )
     """)
+
+    conn.commit()
+    conn.close()
+    print("Database initialized.")
+
     
 def log_test_result(user, file, model, action, allowed):
     """Logs a test result into the database."""
@@ -54,6 +58,7 @@ def log_test_result(user, file, model, action, allowed):
 
     conn.commit()
     conn.close()
+
     
 def fetch_test_results():
     """Fetches and displays all test results from the database."""
@@ -61,14 +66,15 @@ def fetch_test_results():
     cursor = conn.cursor()
 
     cursor.execute("""
-    SELECT user, file, model, action, allowed, timestamp
+    SELECT user, file, model, action, allowed
     FROM test_results
-    ORDER BY timestamp DESC
+    ORDER BY id ASC
     """)
     results = cursor.fetchall()
 
     conn.close()
     return results
+
 
 
 
