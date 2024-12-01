@@ -53,12 +53,12 @@ def test_access_control():
 def view_test_results():
     """Displays all access control test results from the database."""
     results = fetch_test_results()
-    print("\n" + "=" * 80)
-    print(f"{'USER':<10} {'FILE':<25} {'MODEL':<10} {'ACTION':<10} {'ALLOWED':<8}")
-    print("=" * 80)
+    print("\n" + "=" * 100)
+    print(f"{'USER':<10} {'FILE':<25} {'MODEL':<10} {'ACTION':<10} {'ALLOWED':<8} {'TIMESTAMP':<20}")
+    print("=" * 100)
     for result in results:
-        print(f"{result['user']:<10} {result['file']:<25} {result['model']:<10} {result['action']:<10} {str(result['allowed']):<8}")
-    print("=" * 80)
+        print(f"{result['user']:<10} {result['file']:<25} {result['model']:<10} {result['action']:<10} {str(result['allowed']):<8} {result['timestamp']:<20}")
+    print("=" * 100)
 
 
 def main_menu():

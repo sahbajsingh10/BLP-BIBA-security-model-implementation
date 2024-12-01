@@ -1,4 +1,5 @@
 import sqlite3
+import datetime
 
 def get_db_connection():
     """Establishes and returns a database connection."""
@@ -29,7 +30,7 @@ def setup_database():
     )
     """)
 
-    # Create test_results table without timestamp
+    # Create test_results table with timestamp
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS test_results (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -37,7 +38,8 @@ def setup_database():
         file TEXT NOT NULL,
         model TEXT NOT NULL,
         action TEXT NOT NULL,
-        allowed BOOLEAN NOT NULL
+        allowed BOOLEAN NOT NULL,
+        timestamp TEXT NOT NULL  -- New timestamp column
     )
     """)
 
@@ -45,28 +47,29 @@ def setup_database():
     conn.close()
     print("Database initialized.")
 
-    
 def log_test_result(user, file, model, action, allowed):
     """Logs a test result into the database."""
     conn = get_db_connection()
     cursor = conn.cursor()
 
+    # Get the current timestamp
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
     cursor.execute("""
-    INSERT INTO test_results (user, file, model, action, allowed)
-    VALUES (?, ?, ?, ?, ?)
-    """, (user, file, model, action, allowed))
+    INSERT INTO test_results (user, file, model, action, allowed, timestamp)
+    VALUES (?, ?, ?, ?, ?, ?)
+    """, (user, file, model, action, allowed, timestamp))
 
     conn.commit()
     conn.close()
 
-    
 def fetch_test_results():
     """Fetches and displays all test results from the database."""
     conn = get_db_connection()
     cursor = conn.cursor()
 
     cursor.execute("""
-    SELECT user, file, model, action, allowed
+    SELECT user, file, model, action, allowed, timestamp
     FROM test_results
     ORDER BY id ASC
     """)
@@ -74,9 +77,6 @@ def fetch_test_results():
 
     conn.close()
     return results
-
-
-
 
 if __name__ == "__main__":
     setup_database()
