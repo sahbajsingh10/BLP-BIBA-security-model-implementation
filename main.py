@@ -5,57 +5,21 @@ from security_models.biba import BibaModel
 from database.db_setup import fetch_test_results, setup_database, log_test_result
 
 
-def register_user():
-    """Registers a new user by asking for their details."""
-    user_manager = UserManager()
-    
-    print("\n=== User Registration ===")
-    username = input("Enter username: ")
-    security_level = int(input("Enter security level (integer): "))
-    compartments = input("Enter compartments (comma-separated, e.g., HR,Finance): ").split(',')
-
-    user_manager.add_user(username, security_level, compartments)
-    print(f"User '{username}' registered successfully!")
-
-
-def register_menu():
-    """Displays a menu for user registration."""
-    while True:
-        print("\n=== Main Menu ===")
-        print("1. Register a new user")
-        print("2. View test results")
-        print("3. Run access control tests")
-        print("4. Exit")
-        choice = input("Enter your choice: ")
-        
-        if choice == "1":
-            register_user()
-        elif choice == "2":
-            view_test_results()
-        elif choice == "3":
-            test_access_control()
-        elif choice == "4":
-            print("Exiting the program.")
-            break
-        else:
-            print("Invalid choice. Please try again.")
-
-
 def test_access_control():
+    """Runs access control tests using Bell-LaPadula and Biba models."""
     user_manager = UserManager()
     file_manager = FileManager()
     blp = BellLaPadula()
     biba = BibaModel()
 
-    # Add multiple users
+    # Add predefined users
     user_manager.add_user("Alice", 2, ["HR", "Finance"])
     user_manager.add_user("Bob", 1, ["IT"])
     user_manager.add_user("Charlie", 3, ["Finance", "Legal"])
     user_manager.add_user("Diana", 2, ["HR"])
     user_manager.add_user("Eve", 3, ["IT", "Finance"])
-    user_manager.add_user("Sahbaj", 3, ["Bossman", "Boss"])
 
-    # Add multiple files
+    # Add predefined files
     file_manager.create_file("Report.pdf", 3, ["Finance"])
     file_manager.create_file("IT_Policy.docx", 1, ["IT"])
     file_manager.create_file("Legal_Doc.txt", 2, ["Legal"])
@@ -63,7 +27,7 @@ def test_access_control():
     file_manager.create_file("Financial_Report.xlsx", 3, ["Finance", "Legal"])
 
     # Fetch users and files
-    users = {username: user_manager.get_user(username) for username in ["Alice", "Bob", "Charlie", "Diana", "Eve", "Sahbaj"]}
+    users = {username: user_manager.get_user(username) for username in ["Alice", "Bob", "Charlie", "Diana", "Eve"]}
     files = {filename: file_manager.get_file(filename) for filename in ["Report.pdf", "IT_Policy.docx", "Legal_Doc.txt", "HR_Guide.pdf", "Financial_Report.xlsx"]}
 
     # Dynamic testing and logging
@@ -87,7 +51,7 @@ def test_access_control():
 
 
 def view_test_results():
-    """Displays all test results."""
+    """Displays all access control test results from the database."""
     results = fetch_test_results()
     print("\n" + "=" * 80)
     print(f"{'USER':<10} {'FILE':<25} {'MODEL':<10} {'ACTION':<10} {'ALLOWED':<8}")
@@ -97,12 +61,33 @@ def view_test_results():
     print("=" * 80)
 
 
+def main_menu():
+    """Displays a menu for access control and viewing test results."""
+    while True:
+        print("\n=== Main Menu ===")
+        print("1. View test results")
+        print("2. Run access control tests")
+        print("3. Exit")
+        choice = input("Enter your choice: ")
+        
+        if choice == "1":
+            view_test_results()
+        elif choice == "2":
+            test_access_control()
+        elif choice == "3":
+            print("Exiting the program.")
+            break
+        else:
+            print("Invalid choice. Try again.")
+
+
 def main():
+    """Main entry point for the program."""
     # Initialize database
     setup_database()
 
-    # Display registration menu
-    register_menu()
+    # Display the main menu
+    main_menu()
 
 
 if __name__ == "__main__":
