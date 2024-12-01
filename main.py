@@ -4,7 +4,6 @@ from security_models.blp import BellLaPadula
 from security_models.biba import BibaModel
 from database.db_setup import fetch_test_results, setup_database, log_test_result
 
-
 def test_access_control():
     """Runs access control tests using Bell-LaPadula and Biba models."""
     user_manager = UserManager()
@@ -49,7 +48,6 @@ def test_access_control():
                     print(f"{model_name:<10} {action.upper():<10} {user_name:<10} {file_name:<25} {str(allowed):<8}")
     print("=" * 80)
 
-
 def view_test_results():
     """Displays all access control test results from the database."""
     results = fetch_test_results()
@@ -59,7 +57,6 @@ def view_test_results():
     for result in results:
         print(f"{result['user']:<10} {result['file']:<25} {result['model']:<10} {result['action']:<10} {str(result['allowed']):<8} {result['timestamp']:<20}")
     print("=" * 100)
-
 
 def main_menu():
     """Displays a menu for access control and viewing test results."""
@@ -80,7 +77,6 @@ def main_menu():
         else:
             print("Invalid choice. Try again.")
 
-
 def main():
     """Main entry point for the program."""
     # Initialize database
@@ -92,3 +88,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
