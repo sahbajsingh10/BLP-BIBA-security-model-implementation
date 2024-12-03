@@ -3,7 +3,7 @@ from database.db_setup import get_db_connection
 
 class FileManager:
     def __init__(self):
-        pass  # No in-memory storage needed anymore
+        pass  # No in-memory storage needed
 
     def create_file(self, filename, security_level, compartments):
         """Adds a new file to the database."""
